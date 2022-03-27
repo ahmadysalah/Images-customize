@@ -8,7 +8,7 @@ import ReactCrop, {
 } from 'react-image-crop'
 import { canvasPreview } from './canvasPreview'
 import { useDebounceEffect } from './useDebounceEffect'
-
+import Compress from './compress';
 import 'react-image-crop/dist/ReactCrop.css'
 
 // This is to demonstate how to make and center a % aspect crop
@@ -34,6 +34,7 @@ function centerAspectCrop(
 }
 
 export default function App() {
+  const [file, setFile] = useState<File | null>(null)
   const [imgSrc, setImgSrc] = useState('')
   const previewCanvasRef = useRef<HTMLCanvasElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
@@ -50,6 +51,7 @@ export default function App() {
       reader.addEventListener('load', () =>
         reader?.result && setImgSrc(reader?.result.toString() || ''),
       )
+      setFile(e.target.files[0])
       reader.readAsDataURL(e.target.files[0])
     }
   }
@@ -93,6 +95,7 @@ export default function App() {
     }
   }
 
+  console.log(imgSrc)
   return (
     <div className="App">
       <div>
@@ -158,6 +161,7 @@ export default function App() {
           )}
         </div>
       </div>
+      <Compress file={file as any} />
     </div>
   )
 }
